@@ -1,0 +1,7 @@
+SELECT *
+FROM "fridge_telemetry"
+WHERE
+time >= now() - interval '1 hour'
+AND
+("alarm" IS NOT NULL OR "displacement_mm" IS NOT NULL OR "humidity_rh" IS NOT NULL OR "pressure_hpa" 
+IS NOT NULL OR "rssi" IS NOT NULL OR "snr" IS NOT NULL OR "temperature_c" IS NOT NULL)
