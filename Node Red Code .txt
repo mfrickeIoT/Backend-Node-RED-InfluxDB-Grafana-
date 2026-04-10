@@ -1,0 +1,33 @@
+let p = msg.payload;
+
+if (Buffer.isBuffer(p)) {
+    p = p.toString();
+}
+
+if (typeof p === "string") {
+    try {
+        p = JSON.parse(p);
+    } catch (err) {
+        node.warn("Still invalid JSON: " + p);
+        msg.payload = { raw_input: p };
+        return msg;
+    }
+}
+
+msg.payload = {
+    temperature_c: p.temperature != null ? Number(p.temperature) : null,
+    humidity_rh: p.humidity != null ? Number(p.humidity) : null,
+    pressure_hpa: p.pressure != null ? Number(p.pressure) : null,
+    dms_counts: p.dms_counts != null ? Number(p.dms_counts) : null,
+    displacement_mm: p.displacement_mm != null ? Number(p.displacement_mm) : null,
+    alarm: p.alarm != null ? Number(p.alarm) : null,
+    rssi: p.rssi != null ? Number(p.rssi) : null,
+    snr: p.snr != null ? Number(p.snr) : null
+};
+
+msg.tags = {
+    station: p.sensor || "ValleyStation",
+    source: "valley_station"
+};
+
+return msg;
